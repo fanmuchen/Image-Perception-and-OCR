@@ -6,8 +6,8 @@ import os
 import sys
 import cv2
 import pytesseract
-import tkinter as tk
-from tkinter import filedialog, messagebox
+
+import ui
 
 def prepare_img(image):
     """
@@ -60,35 +60,22 @@ def perform_ocr_with_data(image, psm = 6, lang = None):
     data = pytesseract.image_to_data(processing_img, config = config)
     return data
 
-def select_image_files():
-    """
-    打开文件选择对话框，允许用户选择一个或多个图像文件。
 
-    Returns:
-        image_files: 包含所选图像文件路径的元组。
-    """
-    # Create a Tkinter root window
-    root = tk.Tk()
-    root.withdraw()
-    root.focus_force()
-    # Use file dialog to allow user to select one or more image files
-    image_files = filedialog.askopenfilenames(filetypes=[('Image Files', ('*.jpg', '*.png'))])
-
-    return image_files
 
 if __name__ == "__main__":
 
+    import ui
     # 配置 pytesseract 库
     # 该路径是在Python应用程序中的全局变量。
     # 在Python应用程序的任何位置，只要设置了Tesseract OCR引擎的可执行文件路径，就可以在整个应用程序中使用它，不需要再重新设置一次。
     pytesseract.pytesseract.tesseract_cmd = r"C:\Users\FMC\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"  # 修改为您的 tesseract.exe 路径
 
-    image_files = select_image_files()
+    image_files = ui.select_image_files()
     if not image_files: sys.exit()
 
     # Ask the user whether they want to save the processed images
-    save_processed = messagebox.askyesno("保存处理后的图片", "你想要保存处理后的图片吗？")
-    save_results = messagebox.askyesno("保存识别结果", "你想要保存识别结果吗？")
+    save_processed = ui.yes_or_no("保存处理后的图片", "你想要保存处理后的图片吗？")
+    save_results = ui.yes_or_no("保存识别结果", "你想要保存识别结果吗？")
     
     for image_file in image_files:
 
