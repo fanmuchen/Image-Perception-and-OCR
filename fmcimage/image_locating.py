@@ -1,22 +1,23 @@
 import cv2
 import numpy as np
 
-def template_matching(image, template, threshold = 0.95, mask_black = True):
+def template_matching(image, template, threshold = 0.90, mask_black = False, thresholding = True):
     """
     在图像中搜索模板图像的位置。
 
     参数:
-    image (ndarray): 原始图像的 NumPy 数组。
-    template (ndarray): 模板图像的 NumPy 数组。
-    threshold (float): 匹配误差阈值，默认为0.95。
-    mask_black (bool): 是否使用黑色像素掩膜，默认为True。
+        image (ndarray): 原始图像的 NumPy 数组。
+        template (ndarray): 模板图像的 NumPy 数组。
+        threshold (float): 匹配误差阈值，默认为0.90。
+        mask_black (bool): 是否使用黑色像素掩膜，默认为False。
+        thresholding (bool): 是否对图像进行二值化处理，默认为True。
 
     返回值:
-    match_locations (list of tuple of tuple): 匹配位置的列表。列表中每个元素为一个元组，包含匹配位置的左上角和右下角坐标。
-    
-    该方法使用了 OpenCV 中的模板匹配算法，在原始图像中搜索模板图像的位置。其中，参数image是原始图像的 NumPy 数组，参数template是模板图像的 NumPy 数组，参数threshold是匹配误差阈值，默认为0.95。可选的参数mask_black指定是否使用黑色像素掩膜，默认为True。匹配结果以列表形式返回，列表中每个元素为一个元组，包含匹配位置的左上角和右下角坐标。``` 
+        match_locations (list of tuple of tuple): 匹配位置的列表。列表中每个元素为一个元组，包含匹配位置的左上角和右下角坐标。
 
-    该方法使用了 OpenCV 中的模板匹配算法来搜索模板图像在原始图像中的位置，并返回一个元组列表，每个元组包含匹配位置的左上角和右下角坐标。可选的参数threshold和mask_black可以分别指定匹配误差阈值和是否使用黑色像素掩膜。该方法返回匹配位置的列表。
+    该方法使用了 OpenCV 中的模板匹配算法，在原始图像中搜索模板图像的位置。其中，参数image是原始图像的 NumPy 数组，参数template是模板图像的 NumPy 数组，参数threshold是匹配误差阈值，默认为0.90。可选的参数mask_black指定是否使用黑色像素掩膜，默认为False。可选的参数thresholding指定是否对图像进行二值化处理，默认为True。匹配结果以列表形式返回，列表中每个元素为一个元组，包含匹配位置的左上角和右下角坐标。``` 
+
+    该方法使用了 OpenCV 中的模板匹配算法来搜索模板图像在原始图像中的位置，并返回一个元组列表，每个元组包含匹配位置的左上角和右下角坐标。可选的参数threshold、mask_black和thresholding可以分别指定匹配误差阈值、是否使用黑色像素掩膜和是否对图像进行二值化处理。该方法返回匹配位置的列表。
     """
     # 获得模板图像的高度和宽度
     h, w = template.shape[:-1]
@@ -30,8 +31,22 @@ def template_matching(image, template, threshold = 0.95, mask_black = True):
         # 将掩膜应用于模板图像
         mask = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
 
+    if thresholding:
+        # 将图像从 BGR 格式转换为灰度格式
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # 对图像进行二值化处理，将文字变为白色，背景变为黑色
+        image = cv2.threshold( image, cv2.mean(image)[0]+25, 255, cv2.THRESH_BINARY)[1]
+        # 将图像从 BGR 格式转换为灰度格式
+        template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        # 对图像进行二值化处理，将文字变为白色，背景变为黑色
+        template = cv2.threshold( template, cv2.mean(image)[0]+25, 255, cv2.THRESH_BINARY)[1]
+
     # 搜索模板图像在原始图像中的匹配位置
-    res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask = mask)
+    res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask=mask)
+
+    # cv2.imshow('Result', res)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # 在匹配结果中查找位置
     while True:
