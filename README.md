@@ -2,6 +2,8 @@
 
 # 图像感知与内容识别
 
+https://pypi.org/project/fmcimage/
+
 A lightweight python package that contains necessary modules for perceiving images and using ocr.
 
 Utilizes mainly opencv and tesseract.
