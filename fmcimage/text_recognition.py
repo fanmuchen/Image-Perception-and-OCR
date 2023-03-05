@@ -1,13 +1,9 @@
 """
 这个模块提供了一些用于OCR（Optical Character Recognition）的方法，包括选择图像文件、准备图像、执行OCR识别等。
 """
-
-import os
 import sys
 import cv2
 import pytesseract
-
-import ui
 
 def prepare_img(image):
     """

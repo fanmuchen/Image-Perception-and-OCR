@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import ui
 
 def template_matching(image, template, threshold = 0.95, mask_black = True):
     """
@@ -46,7 +45,7 @@ def template_matching(image, template, threshold = 0.95, mask_black = True):
             match_locations.append((top_left, bottom_right))
             # 设置下一次搜索的区域为已找到的区域
             res[top_left[1]:bottom_right[1], top_left[0]:bottom_right[0]] = -1
-            print(f"Found match at ({top_left[0]}, {top_left[1]})")
+            # print(f"Found match at ({top_left[0]}, {top_left[1]})")
         else:
             # 没有找到更多的匹配位置
             break
@@ -80,6 +79,7 @@ def show_matches(image, match_locations):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
+    import ui
     # 加载原始图像和模板图像
     image_files = ui.select_image_files("原始图像", False)
     template_files = ui.select_image_files("模板图像", False)
