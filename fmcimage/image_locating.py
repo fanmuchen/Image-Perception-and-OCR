@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def template_matching(image, template, threshold = 0.90, mask_black = False, thresholding = True):
+def template_matching(image, template, threshold = 0.80, mask_black = False, thresholding = True):
     """
     在图像中搜索模板图像的位置。
 
@@ -33,11 +33,11 @@ def template_matching(image, template, threshold = 0.90, mask_black = False, thr
         # 将图像从 BGR 格式转换为灰度格式
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # 对图像进行二值化处理，将文字变为白色，背景变为黑色
-        image = cv2.threshold( image, cv2.mean(image)[0]+25, 255, cv2.THRESH_BINARY)[1]
+        image = cv2.threshold( image, cv2.mean(template)[0]+25, 255, cv2.THRESH_BINARY)[1]
         # 将图像从 BGR 格式转换为灰度格式
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
         # 对图像进行二值化处理，将文字变为白色，背景变为黑色
-        template = cv2.threshold( template, cv2.mean(image)[0]+25, 255, cv2.THRESH_BINARY)[1]
+        template = cv2.threshold( template, cv2.mean(template)[0]+25, 255, cv2.THRESH_BINARY)[1]
 
     # 搜索模板图像在原始图像中的匹配位置
     res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask=mask)
