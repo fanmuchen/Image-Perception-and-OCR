@@ -1,6 +1,16 @@
 # Image-Perception-and-OCR
+
 A lightweight python package that contains necessary modules for perceiving images and using ocr.
-一个轻量级的Python包，包含了感知图像和使用OCR所需的必要模块。
+
+Utilizes mainly opencv and tesseract.
+
+It does not necessarily work in OS other than Windows 11.
+
+一个轻量级的Python包，包含了感知图像和使用OCR所需的必要模块，
+
+主要利用了opencv和tesseract，
+
+在除了 windows 11 以外的操作系统不一定可用。
 
 > Note:
 > This is a lightweight, even an ad hoc python package that may not be taylored for general use. I'm also pretty sure there is an abundant collection of repos that have similar implementations in the English world. Therefore I'll be concise in the project introduction and will not provide English version.
