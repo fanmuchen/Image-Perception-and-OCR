@@ -65,12 +65,20 @@ def perform_ocr_with_data(image, psm = 6, lang = None):
 if __name__ == "__main__":
 
     import ui
+    import subprocess
+
     # 配置 pytesseract 库
     # 该路径是在Python应用程序中的全局变量。
     # 在Python应用程序的任何位置，只要设置了Tesseract OCR引擎的可执行文件路径，就可以在整个应用程序中使用它，不需要再重新设置一次。
-    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\FMC\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"  # 修改为您的 tesseract.exe 路径
+    try:
+        subprocess.run(['tesseract', '-v'], check=True)
+        print("Tesseract found.")
+    except:
+        print("Tesseract not found. Using hardcoded path.")
+        pytesseract.pytesseract.tesseract_cmd = r"C:\Users\FMC\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"  # 修改为您的 tesseract.exe 路径
+    # 最好还是在系统变量中设置好tesseract路径。
 
-    image_files = ui.select_image_files()
+    image_files = ui.select_image_files(insist = False)
     if not image_files: sys.exit()
 
     # Ask the user whether they want to save the processed images
@@ -80,17 +88,13 @@ if __name__ == "__main__":
     for image_file in image_files:
 
         image = cv2.imread(image_file)
-        
         processing_img = prepare_img(image)
-
         cv2.imshow("Image", processing_img)
         cv2.waitKey(0)
-
         if save_processed:
             cv2.imwrite(f"{image_file}_processed.png", processing_img)
         if save_results:
             results_file = open(f"{image_file}_ocr_results.txt", "w", encoding="utf-8")
-
         # 使用 Tesseract 进行 OCR 识别
         for i in range(1, 16):
             try:
@@ -108,7 +112,6 @@ if __name__ == "__main__":
                 if save_results:
                     results_file.write(f"{image_file} (psm: {i}): {e}\n\n")
                 pass
-        
         if save_results:
             results_file.close()
 
