@@ -15,8 +15,6 @@ def template_matching(image, template, threshold = 0.90, mask_black = False, thr
     返回值:
         match_locations (list of tuple of tuple): 匹配位置的列表。列表中每个元素为一个元组，包含匹配位置的左上角和右下角坐标。
 
-    该方法使用了 OpenCV 中的模板匹配算法，在原始图像中搜索模板图像的位置。其中，参数image是原始图像的 NumPy 数组，参数template是模板图像的 NumPy 数组，参数threshold是匹配误差阈值，默认为0.90。可选的参数mask_black指定是否使用黑色像素掩膜，默认为False。可选的参数thresholding指定是否对图像进行二值化处理，默认为True。匹配结果以列表形式返回，列表中每个元素为一个元组，包含匹配位置的左上角和右下角坐标。``` 
-
     该方法使用了 OpenCV 中的模板匹配算法来搜索模板图像在原始图像中的位置，并返回一个元组列表，每个元组包含匹配位置的左上角和右下角坐标。可选的参数threshold、mask_black和thresholding可以分别指定匹配误差阈值、是否使用黑色像素掩膜和是否对图像进行二值化处理。该方法返回匹配位置的列表。
     """
     # 获得模板图像的高度和宽度
@@ -43,6 +41,10 @@ def template_matching(image, template, threshold = 0.90, mask_black = False, thr
 
     # 搜索模板图像在原始图像中的匹配位置
     res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED, mask=mask)
+
+    # cv2.imshow('Result', image)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # cv2.imshow('Result', res)
     # cv2.waitKey(0)
